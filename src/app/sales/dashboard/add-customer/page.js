@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import "../dashboard.css";
 
 export default function AddCustomerPage(){
 
