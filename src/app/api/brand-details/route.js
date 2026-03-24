@@ -23,9 +23,16 @@ JOIN models m
 ON w.model_id = m.id
 
 JOIN brands b
-ON w.brand_id = b.id
+ON m.brand_id = b.id
 
-GROUP BY w.reference_number
+GROUP BY 
+b.name,
+m.name,
+w.reference_number,
+w.movement,
+w.case_material,
+w.case_diameter,
+w.image
 
 ORDER BY b.name
 
