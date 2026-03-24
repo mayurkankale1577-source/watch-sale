@@ -1,4 +1,7 @@
 import db from "@/db/db";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import * as XLSX from "xlsx";
 
 export async function GET(){

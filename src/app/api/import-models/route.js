@@ -1,4 +1,7 @@
 import db from "@/db/db";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 
 const API_KEY = "v6LcY5GdmeIkd637w5m3cJZYjDElRrnrotbU3yCt";
 

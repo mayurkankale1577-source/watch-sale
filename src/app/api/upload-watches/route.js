@@ -1,6 +1,9 @@
 import db from "@/db/db";
 import * as XLSX from "xlsx";
 import fs from "fs/promises";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 
 export async function POST(req){
 
