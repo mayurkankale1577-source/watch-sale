@@ -1,0 +1,15 @@
+import CreateUserForm from "@/components/CreateUserForm";
+
+export default function CreateUserPage(){
+
+return(
+
+<div>
+
+<CreateUserForm/>
+
+</div>
+
+)
+
+}
