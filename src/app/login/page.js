@@ -29,7 +29,7 @@ if(data.success){
     localStorage.setItem("name", data.user.name);
     localStorage.setItem("role", data.user.role);
 if(data.user.role === "admin" || data.user.role === "manager"){
-router.push("/admin/dashboard");
+router.push("/dashboard");
 }
 
 else if(data.user.role === "sales"){
