@@ -101,7 +101,7 @@ return(
 {tab==="excel" && (
 <>
 
-<h2 className="form-title">UPDATE CATALOG</h2>
+<h2 className="form-title">UPDATE STOCK</h2>
 
 <input
 className="form-input"
@@ -110,7 +110,7 @@ onChange={(e)=>setFile(e.target.files[0])}
 />
 
 <button className="form-button" onClick={upload}>
-Update Catalog
+UPDATE STOCK
 </button>
 </>
 )}
