@@ -28,10 +28,12 @@ GROUP BY w.reference_number
 const worksheet = XLSX.utils.json_to_sheet(rows);
 
 const workbook = XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(workbook,worksheet,"Watches");
+XLSX.utils.book_append_sheet(workbook, worksheet, "Catalog");
+
+/* ⭐ IMPORTANT CHANGE */
 
 const buffer = XLSX.write(workbook,{
-type:"buffer",
+type:"array",
 bookType:"xlsx"
 });
 
@@ -44,12 +46,11 @@ headers:{
 
 }catch(err){
 
-console.error("Download Error:",err);
+console.error(err);
 
-return new Response(
-JSON.stringify({error:"Failed to download file"}),
-{status:500}
-);
+return Response.json({
+error:err.message
+},{status:500});
 
 }
 
