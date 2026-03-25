@@ -8,22 +8,31 @@ export async function GET(){
 
 try{
 
-const [rows] = await db.query(`
-SELECT 
-b.name as brand,
-m.name as model,
-w.reference_number,
-w.movement,
-w.year_of_production,
-w.case_material,
-w.case_diameter,
-w.description,
-w.image
-FROM watches w
-JOIN brands b ON w.brand_id=b.id
-JOIN models m ON w.model_id=m.id
-GROUP BY w.reference_number
-`);
+    const [rows] = await db.query(`
+        SELECT 
+        b.name as brand,
+        m.name as model,
+        w.reference_number,
+        w.movement,
+        w.year_of_production,
+        w.case_material,
+        w.case_diameter,
+        w.description,
+        w.image
+        FROM watches w
+        JOIN brands b ON w.brand_id=b.id
+        JOIN models m ON w.model_id=m.id
+        GROUP BY 
+        b.name,
+        m.name,
+        w.reference_number,
+        w.movement,
+        w.year_of_production,
+        w.case_material,
+        w.case_diameter,
+        w.description,
+        w.image
+        `);
 
 const worksheet = XLSX.utils.json_to_sheet(rows);
 
