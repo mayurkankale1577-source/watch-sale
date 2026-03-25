@@ -1,10 +1,12 @@
-import db from "@/db/db";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+import db from "@/db/db";
 import * as XLSX from "xlsx";
 
 export async function GET(){
+
+try{
 
 const [rows] = await db.query(`
 SELECT 
@@ -35,10 +37,20 @@ bookType:"xlsx"
 
 return new Response(buffer,{
 headers:{
-"Content-Disposition":"attachment; filename=watches.xlsx",
-"Content-Type":
-"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+"Content-Disposition":"attachment; filename=catalog.xlsx",
+"Content-Type":"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 }
 });
+
+}catch(err){
+
+console.error("Download Error:",err);
+
+return new Response(
+JSON.stringify({error:"Failed to download file"}),
+{status:500}
+);
+
+}
 
 }
