@@ -118,6 +118,46 @@
 }
 
 
+
+
+.status{
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:12px;
+  text-transform:capitalize;
+  }
+  
+  .status.waiting{
+  background:#fff3cd;
+  color:#856404;
+  }
+  
+  .status.assigned{
+  background:#d1ecf1;
+  color:#0c5460;
+  }
+  
+  .status.sold{
+  background:#d4edda;
+  color:#155724;
+  }
+  
+  .status.cancelled{
+  background:#f8d7da;
+  color:#721c24;
+  }
+  
+  .stock{
+    font-size:12px;
+    margin-top:3px;
+    color:#666;
+    }
+    
+    .out-stock{
+    color:#d9534f;
+    font-weight:500;
+    }
+
 /* ================================ form section============================ */
 
 .form-container {

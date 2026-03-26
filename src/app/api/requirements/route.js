@@ -39,6 +39,7 @@ u.id AS sales_id,          /* ✅ IMPORTANT */
 u.name AS sales_name,
 
 r.created_at,
+r.status,
 
 /* STOCK COUNT */
 (SELECT COUNT(*) 
@@ -55,13 +56,11 @@ r.created_at,
 
 /* ================= ASSIGNED EXTRA ================= */
 
-if(status === "assigned"){
 query += `,
 a.assigned_at,
 a.hold_until,
 w.serial_number
 `;
-}
 
 /* ================= FROM ================= */
 
@@ -72,16 +71,18 @@ JOIN customers c ON r.customer_id = c.id
 JOIN brands b ON r.brand_id = b.id
 JOIN models m ON r.model_id = m.id
 JOIN users u ON r.sales_person_id = u.id
+LEFT JOIN assignments a ON r.id = a.requirement_id
+LEFT JOIN watches w ON a.watch_id = w.id
 `;
 
 /* ================= ONLY ASSIGNED ================= */
 
-if(status === "assigned"){
-query += `
-JOIN assignments a ON r.id = a.requirement_id
-JOIN watches w ON a.watch_id = w.id
-`;
-}
+// if(status === "assigned"){
+// query += `
+// JOIN assignments a ON r.id = a.requirement_id
+// JOIN watches w ON a.watch_id = w.id
+// `;
+// }
 
 /* ================= CONDITIONS ================= */
 

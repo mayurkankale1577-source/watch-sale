@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function AllDetails(){
 
 const [data,setData] = useState([]);
-const [status,setStatus] = useState("waiting");
+const [status,setStatus] = useState("");
 const [search,setSearch] = useState("");
 
 const [stats,setStats] = useState({});
@@ -73,6 +73,7 @@ setStatus(e.target.value);
 setPage(1);
 }}
 >
+<option value="">All</option>
 <option value="waiting">Waiting</option>
 <option value="assigned">Assigned</option>
 <option value="sold">Sold</option>
@@ -104,8 +105,9 @@ setPage(1);
 <th>Model</th>
 <th>Reference</th>
 <th>Sales</th>
+<th>Status</th>
+<th>Serial</th>
 <th>Created</th>
- 
 </tr>
 </thead>
 
@@ -133,6 +135,24 @@ data.map(r=>(
 <td>{r.reference_number || "ANY"}</td>
 
 <td>{r.sales_name}</td>
+
+<td>
+<span className={`status ${r.status}`}>
+{r.status}
+</span>
+
+{r.status === "waiting" && (
+<div className="stock">
+{r.available_count > 0 
+  ? `${r.available_count} in stock` 
+  : "Out of stock"}
+</div>
+)}
+
+</td>
+<td>
+{r.serial_number ? r.serial_number : "-"}
+</td>
 
 <td>{new Date(r.created_at).toLocaleDateString()}</td>
 
