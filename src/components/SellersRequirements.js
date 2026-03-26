@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then(res => res.json());
 
 export default function AllDetails(){
 
@@ -17,16 +20,17 @@ const limit = 10;
 
 /* ================= TABLE DATA ================= */
 
-useEffect(()=>{
-
-fetch(`/api/requirements?status=${status}&page=${page}&search=${search}`)
-.then(res=>res.json())
-.then(res=>{
-setData(res.data || res);   // ✅ old + new both support
-setTotal(res.total || res.length || 0);
-});
-
-},[status,page,search]);
+const { data: res } = useSWR(
+  `/api/requirements?status=${status}&page=${page}&search=${search}`,
+  fetcher
+  );
+  
+  useEffect(()=>{
+  if(res){
+  setData(res.data || res);
+  setTotal(res.total || res.length || 0);
+  }
+  },[res]);
 
 /* ================= DASHBOARD ================= */
 
