@@ -57,8 +57,8 @@ return(
 
 
 <Link
-href="/admin/dashboard"
-className={pathname === "/admin/dashboard" ? "active" : ""}
+href="/dashboard"
+className={pathname === "/dashboard" ? "active" : ""}
 >
 DASHBOARD
 </Link>
@@ -69,8 +69,8 @@ DASHBOARD
 
 
 <Link
-href="/admin/dashboard/create-user"
-className={pathname === "/admin/dashboard/create-user" ? "active" : ""}
+href="/dashboard/create-user"
+className={pathname === "/dashboard/create-user" ? "active" : ""}
 >
 CREATE SALES USER
 </Link>
@@ -78,23 +78,23 @@ CREATE SALES USER
 )}
 
 <Link
-href="/admin/dashboard/add-customer"
-className={pathname === "/admin/dashboard/add-customer" ? "active" : ""}
+href="/dashboard/add-customer"
+className={pathname === "/dashboard/add-customer" ? "active" : ""}
 >
 ADD CLIENT
 </Link>
 
 
 <Link
-href="/admin/dashboard/brand-details"
-className={pathname === "/admin/dashboard/brand-details" ? "active" : ""}
+href="/dashboard/brand-details"
+className={pathname === "/dashboard/brand-details" ? "active" : ""}
 >
 CATALOG DETAILS
 </Link>
 
 <Link
-href="/admin/dashboard/upload-watches"
-className={pathname === "/admin/dashboard/upload-watches" ? "active" : ""}
+href="/dashboard/upload-watches"
+className={pathname === "/dashboard/upload-watches" ? "active" : ""}
 >
 UPDATE STOCK
 </Link>
@@ -107,6 +107,12 @@ className={pathname === "/admin/dashboard/assign-customer" ? "active" : ""}
 ASSIGN CLIENT
 </Link> */}
 
+<Link
+href="/dashboard/my-profile"
+className={pathname === "/dashboard/my-profile" ? "active" : ""}
+>
+MY PROFILE
+</Link>
  
  
 

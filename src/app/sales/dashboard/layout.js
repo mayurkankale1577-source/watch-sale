@@ -84,11 +84,13 @@ className={pathname === "/sales/dashboard/add-requirement" ? "active" : ""}
 ADD REQUIREMENT
 </Link> */}
 
+
+
 <Link
-href="/sales/dashboard/requirements"
-className={pathname === "/sales/dashboard/requirements" ? "active" : ""}
+href="/sales/dashboard/my-profile"
+className={pathname === "/sales/dashboard/my-profile" ? "active" : ""}
 >
-MY REQUEST
+MY PROFILE
 </Link>
 
 </nav>

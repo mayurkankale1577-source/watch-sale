@@ -223,7 +223,7 @@ function Card({title,value}){
 return(
 <div className="ad-card">
 <h4>{title}</h4>
-<h2>{value || 0}</h2>
+<h2>{value !== undefined ? value : "..."}</h2>
 </div>
 );
 }
