@@ -100,12 +100,12 @@ UPDATE STOCK
 </Link>
 
 
-{/* <Link
-href="/admin/dashboard/assign-customer"
-className={pathname === "/admin/dashboard/assign-customer" ? "active" : ""}
+<Link
+href="/dashboard/transfer-history"
+className={pathname === "/dashboard/transfer-history" ? "active" : ""}
 >
-ASSIGN CLIENT
-</Link> */}
+TRANSFER HISTORY
+</Link>
 
 <Link
 href="/dashboard/my-profile"

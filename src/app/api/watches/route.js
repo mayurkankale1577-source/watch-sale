@@ -1,4 +1,6 @@
 import db from "@/db/db";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,7 +12,19 @@ const {searchParams} = new URL(req.url);
 const modelId = searchParams.get("model_id");
 const reference = searchParams.get("reference");
 
-/* Allocation page */
+/* ================= STORE FROM TOKEN ================= */
+
+const cookieStore = cookies();
+const token = cookieStore.get("token")?.value;
+
+let storeId = null;
+
+if(token){
+const decoded = jwt.verify(token,process.env.JWT_SECRET);
+storeId = decoded.store_id;
+}
+
+/* ================= Allocation page ================= */
 
 if(modelId){
 
@@ -23,6 +37,13 @@ AND status='available'
 
 let params = [modelId];
 
+/* store filter */
+
+if(storeId){
+query += " AND store_id=?";
+params.push(storeId);
+}
+
 if(reference && reference !== "null"){
 query += " AND reference_number=?";
 params.push(reference);
@@ -33,9 +54,9 @@ const [rows] = await db.query(query,params);
 return Response.json(rows);
 }
 
-/* Seller stock page */
+/* ================= Seller stock page ================= */
 
-const [rows] = await db.query(`
+let query = `
 
 SELECT 
 b.name AS brand,
@@ -52,6 +73,18 @@ JOIN brands b ON w.brand_id = b.id
 JOIN models m ON w.model_id = m.id
 
 WHERE w.status='available'
+`;
+
+let params = [];
+
+/* store filter */
+
+if(storeId){
+query += " AND w.store_id=?";
+params.push(storeId);
+}
+
+query += `
 
 GROUP BY 
 b.name,
@@ -62,8 +95,9 @@ w.case_material,
 w.case_diameter
 
 ORDER BY b.name
+`;
 
-`);
+const [rows] = await db.query(query,params);
 
 return Response.json(rows);
 

@@ -603,3 +603,25 @@ margin-top:15px;
     border-radius: 4px;
     margin: 10px;
   }
+
+
+  .status.pending{
+    background:#ffc107;
+    color:#000;
+    padding:4px 8px;
+    border-radius:4px;
+    }
+    
+    .status.approved{
+    background:#28a745;
+    color:#fff;
+    padding:4px 8px;
+    border-radius:4px;
+    }
+    
+    .status.rejected{
+    background:#dc3545;
+    color:#fff;
+    padding:4px 8px;
+    border-radius:4px;
+    }

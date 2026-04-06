@@ -41,7 +41,8 @@ const token = jwt.sign(
   {
   id:user.id,
   role:user.role,
-  name:user.name   // ⭐ यह add करना जरूरी है
+  name:user.name,
+  store_id:user.store_id
   },
   process.env.JWT_SECRET,
   {expiresIn:"1d"}
@@ -52,10 +53,11 @@ const token = jwt.sign(
 const response = NextResponse.json({
 success:true,
 user:{
-id:user.id,
-name:user.name,
-role:user.role
-}
+  id:user.id,
+  name:user.name,
+  role:user.role,
+  store_id:user.store_id
+  }
 });
 
 /* set cookie */

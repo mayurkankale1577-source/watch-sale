@@ -11,7 +11,14 @@ const [message,setMessage] = useState("");
 const [filterSeller,setFilterSeller] = useState("");
 const [showModal,setShowModal] = useState(false);
 const [sellers,setSellers] = useState([]);
+const [showTransfer,setShowTransfer] = useState(false);
+const [transferReq,setTransferReq] = useState(null);
 
+
+function openTransferRequest(req){
+    setTransferReq(req);
+    setShowTransfer(true);
+    }
 
 useEffect(()=>{
     fetch("/api/sales-users")
@@ -178,20 +185,37 @@ requirements.map(r=>(
 </td>
 
 <td>
+{r.available_count > 0 ? (
+
 <button 
 onClick={()=>loadWatches(r)}
-disabled={r.available_count === 0}
 style={{
-background: r.available_count === 0 ? "#ccc" : "#000",
-color: "#fff",
-padding: "9px 15px",
-cursor: r.available_count === 0 ? "not-allowed" : "pointer",
-border: "none",
-borderRadius: "4px"
+background:"#000",
+color:"#fff",
+padding:"9px 15px",
+border:"none",
+borderRadius:"4px"
 }}
 >
 Allocate Watch
 </button>
+
+) : (
+
+<button
+onClick={()=>openTransferRequest(r)}
+style={{
+background:"#c89b3c",
+color:"#fff",
+padding:"9px 15px",
+border:"none",
+borderRadius:"4px"
+}}
+>
+Request Watch
+</button>
+
+)}
 </td>
 
 </tr>
@@ -323,6 +347,57 @@ right:"10px"
 
 )}
 
+
+
+{showTransfer && (
+
+<div className="modal-overlay">
+
+<div className="modal-box">
+
+<h3>Request Watch From Other Store</h3>
+
+<p>Model : {transferReq.model}</p>
+<p>Reference : {transferReq.reference_number || "ANY"}</p>
+
+<button
+onClick={async ()=>{
+
+await fetch("/api/watch-transfer-request",{
+method:"POST",
+headers:{ "Content-Type":"application/json"},
+body:JSON.stringify({
+requirement_id:transferReq.id,
+model_id:transferReq.model_id,
+reference:transferReq.reference_number
+})
+});
+
+alert("Transfer request sent");
+
+setShowTransfer(false);
+
+}}
+>
+Send Request
+</button>
+
+<button onClick={()=>setShowTransfer(false)}>
+Cancel
+</button>
+
+</div>
+
+</div>
+
+)}
+
+
+
 </div>
 );
+
+
+
+
 }

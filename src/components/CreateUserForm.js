@@ -10,33 +10,38 @@ const [password,setPassword] = useState("");
 const [role,setRole] = useState("sales");
 
 const [currentRole,setCurrentRole] = useState("");
+const [storeId,setStoreId] = useState("");
 
 const [errors,setErrors] = useState({});
 
 useEffect(()=>{
 
-    async function loadUser(){
-    
-    const res = await fetch("/api/me");
-    const data = await res.json();
-    
-    if(data.user){
-    
-    setCurrentRole(data.user.role);
-    
-    if(data.user.role === "admin"){
-    setRole("admin");
-    }else if(data.user.role === "manager"){
-    setRole("sales");
-    }
-    
-    }
-    
-    }
-    
-    loadUser();
-    
-    },[]);
+async function loadUser(){
+
+const res = await fetch("/api/me");
+const data = await res.json();
+
+if(data.user){
+
+setCurrentRole(data.user.role);
+
+/* default role set */
+
+if(data.user.role === "admin"){
+setRole("admin");
+}
+
+else if(data.user.role === "manager"){
+setRole("sales");
+}
+
+}
+
+}
+
+loadUser();
+
+},[]);
 
 function validate(){
 
@@ -63,6 +68,12 @@ newErrors.password = "Password required";
 newErrors.password = "Minimum 4 characters";
 }
 
+/* store validation only for admin */
+
+if(currentRole === "admin" && !storeId){
+newErrors.store = "Store required";
+}
+
 setErrors(newErrors);
 
 return Object.keys(newErrors).length === 0;
@@ -76,15 +87,16 @@ e.preventDefault();
 if(!validate()) return;
 
 const res = await fetch("/api/users",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json"},
-    body:JSON.stringify({
-    name,
-    email,
-    password,
-    role
-    })
-    });
+method:"POST",
+headers:{ "Content-Type":"application/json"},
+body:JSON.stringify({
+name,
+email,
+password,
+role,
+store_id:storeId
+})
+});
 
 if(!res.ok){
 alert("Server error");
@@ -94,6 +106,13 @@ return;
 const data = await res.json();
 
 alert(data.message);
+
+/* reset form */
+
+setName("");
+setEmail("");
+setPassword("");
+setStoreId("");
 
 }
 
@@ -151,6 +170,7 @@ onChange={(e)=>setRole(e.target.value)}
 >
 
 {/* Admin options */}
+
 {currentRole === "admin" && (
 <>
 <option value="admin">Admin</option>
@@ -160,11 +180,38 @@ onChange={(e)=>setRole(e.target.value)}
 )}
 
 {/* Manager options */}
+
 {currentRole === "manager" && (
 <option value="sales">Sales</option>
 )}
 
 </select>
+
+{/* STORE SELECT ONLY FOR ADMIN */}
+
+{currentRole === "admin" && (
+
+<>
+
+<label className="form-label">Select Store</label>
+
+<select
+className="form-input"
+value={storeId}
+onChange={(e)=>setStoreId(e.target.value)}
+>
+
+<option value="">Select Store</option>
+<option value="1">Mumbai Store</option>
+<option value="2">Pune Store</option>
+
+</select>
+
+{errors.store && <p className="error">{errors.store}</p>}
+
+</>
+
+)}
 
 <button className="form-button">
 Create User

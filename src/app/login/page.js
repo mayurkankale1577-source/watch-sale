@@ -28,6 +28,7 @@ if(data.success){
     localStorage.setItem("userid", data.user.id);
     localStorage.setItem("name", data.user.name);
     localStorage.setItem("role", data.user.role);
+    localStorage.setItem("store_id", data.user.store_id);
 if(data.user.role === "admin" || data.user.role === "manager"){
 router.push("/dashboard");
 }

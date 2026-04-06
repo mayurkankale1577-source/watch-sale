@@ -2,28 +2,46 @@ import db from "@/db/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
 
 export async function POST(req){
 
 try{
 
 const body = await req.json();
-const {name,email,password,role} = body;
+const {name,email,password,role,store_id} = body;
 
 /* read token */
 
-const cookieStore = await cookies();
+const cookieStore = cookies();
 const token = cookieStore.get("token")?.value;
 
 if(!token){
 return Response.json({message:"Unauthorized"});
 }
 
+/* decode token */
+
 const decoded = jwt.verify(token,process.env.JWT_SECRET);
 const currentRole = decoded.role;
+
+/* store logic */
+
+let storeId = store_id;
+
+/* manager always own store */
+
+if(currentRole === "manager"){
+storeId = decoded.store_id;
+}
+
+/* admin user should not have store */
+
+if(role === "admin"){
+storeId = null;
+}
 
 /* role checks */
 
@@ -59,8 +77,8 @@ const hashedPassword = await bcrypt.hash(password,10);
 /* insert user */
 
 await db.query(
-"INSERT INTO users (name,email,password,role) VALUES (?,?,?,?)",
-[name,email,hashedPassword,role]
+"INSERT INTO users (name,email,password,role,store_id) VALUES (?,?,?,?,?)",
+[name,email,hashedPassword,role,storeId]
 );
 
 return Response.json({

@@ -21,8 +21,10 @@ return Response.json({message:"Unauthorized"});
 
 const decoded = jwt.verify(token,process.env.JWT_SECRET);
 const currentRole = decoded.role;
+const storeId = decoded.store_id;
 
 let query = "";
+let values = [];
 
 /* role-based access */
 
@@ -31,14 +33,15 @@ query = "SELECT id,name,email,role FROM users";
 }
 
 else if(currentRole === "manager"){
-query = "SELECT id,name,email,role FROM users WHERE role='sales'";
+query = "SELECT id,name,email,role FROM users WHERE role='sales' AND store_id=?";
+values = [storeId];
 }
 
 else{
 return Response.json({message:"Access denied"});
 }
 
-const [rows] = await db.query(query);
+const [rows] = await db.query(query,values);
 
 return Response.json(rows);
 
@@ -68,6 +71,7 @@ return Response.json({message:"Unauthorized"});
 
 const decoded = jwt.verify(token,process.env.JWT_SECRET);
 const currentRole = decoded.role;
+const storeId = decoded.store_id;
 
 const body = await req.json();
 const {id,name,email,role,password} = body;
@@ -78,6 +82,23 @@ if(currentRole === "manager" && role !== "sales"){
 return Response.json({
 message:"Manager can only assign sales role"
 });
+}
+
+/* 🔒 store security (manager cannot edit other store users) */
+
+if(currentRole === "manager"){
+
+const [[user]] = await db.query(
+"SELECT store_id FROM users WHERE id=?",
+[id]
+);
+
+if(user.store_id !== storeId){
+return Response.json({
+message:"You cannot update users from another store"
+});
+}
+
 }
 
 /* check duplicate email */

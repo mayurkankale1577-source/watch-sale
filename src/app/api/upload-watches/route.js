@@ -3,11 +3,25 @@ import * as XLSX from "xlsx";
 import fs from "fs/promises";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 
 export async function POST(req){
 
 try{
+
+  /* ===== STORE FROM TOKEN ===== */
+
+const cookieStore = cookies();
+const token = cookieStore.get("token")?.value;
+
+let storeId = null;
+
+if(token){
+const decoded = jwt.verify(token,process.env.JWT_SECRET);
+storeId = decoded.store_id;
+}
 
 const formData = await req.formData();
 
@@ -94,22 +108,23 @@ serial = "SN" + String(num + 1).padStart(3,"0");
 /* INSERT */
 await db.query(
 `INSERT INTO watches
-(reference_number,serial_number,movement,year_of_production,case_material,case_diameter,description,last_updated,brand_id,model_id,image,status)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+(reference_number,serial_number,movement,year_of_production,case_material,case_diameter,description,last_updated,brand_id,model_id,image,status,store_id)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
 [
-reference,
-serial,
-movement,
-year,
-material,
-diameter,
-description,
-new Date(),
-brandId,
-modelId,
-imageName,
-"available"
-]
+  reference,
+  serial,
+  movement,
+  year,
+  material,
+  diameter,
+  description,
+  new Date(),
+  brandId,
+  modelId,
+  imageName,
+  "available",
+  storeId
+  ]
 );
 
 return Response.json({message:"Watch added"});
@@ -188,22 +203,23 @@ serial = "SN" + String(num + 1).padStart(3,"0");
 /* ===== INSERT ===== */
 await db.query(
 `INSERT INTO watches
-(reference_number,serial_number,movement,year_of_production,case_material,case_diameter,description,last_updated,brand_id,model_id,image,status)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+(reference_number,serial_number,movement,year_of_production,case_material,case_diameter,description,last_updated,brand_id,model_id,image,status,store_id)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
 [
-reference,
-serial,
-r["movement"],
-r["year_of_production"],
-r["case_material"],
-r["case_diameter"],
-r["description"],
-new Date(),
-brandId,
-modelId,
-r["image"],
-"available"
-]
+  reference,
+  serial,
+  r["movement"],
+  r["year_of_production"],
+  r["case_material"],
+  r["case_diameter"],
+  r["description"],
+  new Date(),
+  brandId,
+  modelId,
+  r["image"],
+  "available",
+  storeId
+  ]
 );
 
 }

@@ -23,13 +23,14 @@ const [rows] = await db.query(
 );
 
 return Response.json({
-user:{
-id:decoded.id,
-role:decoded.role,
-name:decoded.name,
-email: rows[0]?.email || ""
-}
-});
+    user:{
+    id:decoded.id,
+    role:decoded.role,
+    name:decoded.name,
+    store_id:decoded.store_id,
+    email: rows[0]?.email || ""
+    }
+    });
 
 }catch(err){
 
