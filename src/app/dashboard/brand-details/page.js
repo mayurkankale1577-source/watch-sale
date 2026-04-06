@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+const storeId = localStorage.getItem("storeid");
+
+fetch("/api/brand-details",{
+headers:{
+storeid:storeId
+}
+})
+.then(res=>res.json())
+.then(data=>setData(data));
  
 
 // 🔹 Filter Section (Accordion)
@@ -51,9 +60,13 @@ const itemsPerPage = 12;
 
 // 🔹 FETCH
 useEffect(()=>{
-  fetch("/api/brand-details")
-  .then(res=>res.json())
-  .then(data=>setData(data));
+  fetch("/api/brand-details",{
+    headers:{
+    storeid:storeId
+    }
+    })
+    .then(res=>res.json())
+    .then(data=>setData(data));
 },[]);
 
 // 🔹 DOWNLOAD
