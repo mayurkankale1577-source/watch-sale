@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import "../login/login.css";
 
-export default function ResetLoginPasswordPage(){
+function ResetLoginPasswordContent(){
 
 const router = useRouter();
 
@@ -90,6 +90,18 @@ Reset Password
 
 </div>
 
-)
+);
+
+}
+
+export default function ResetLoginPasswordPage(){
+
+return(
+
+<Suspense fallback={<div>Loading...</div>}>
+<ResetLoginPasswordContent />
+</Suspense>
+
+);
 
 }
