@@ -2,6 +2,7 @@ import db from "@/db/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -80,6 +81,50 @@ await db.query(
 "INSERT INTO users (name,email,password,role,store_id) VALUES (?,?,?,?,?)",
 [name,email,hashedPassword,role,storeId]
 );
+
+
+/* send email */
+
+const transporter = nodemailer.createTransport({
+
+    service:"gmail",
+    
+    auth:{
+    user:process.env.EMAIL_USER,
+    pass:process.env.EMAIL_PASS
+    }
+    
+    });
+    
+    try{
+
+        await transporter.sendMail({
+        
+        from:process.env.EMAIL_USER,
+        
+        to:email,
+        
+        subject:"Your CRM Login Details",
+        
+        html:`
+        
+        <h2>Account Created</h2>
+        
+        <p>Your account has been created successfully.</p>
+        
+        <p><b>Email:</b> ${email}</p>
+        
+        <p><b>Password:</b> ${password}</p>
+        
+        `
+        
+        });
+        
+        }catch(mailError){
+        
+        console.log("Mail send failed:",mailError);
+        
+        }
 
 return Response.json({
 message:"User created successfully"
