@@ -49,7 +49,7 @@ router.push("/sales/dashboard");
 }
 
 }else{
-alert("Invalid Login");
+    alert(data.message);
 }
 
 }
