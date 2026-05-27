@@ -46,39 +46,29 @@ if(!captchaToken){
   }
 
 
-  const [rows] = await db.query(
-    "SELECT * FROM users WHERE email=?",
-    [email]
-    );
-    
-    console.log("ROWS:", rows);
-    
-    if(rows.length === 0){
-    
-    console.log("USER NOT FOUND");
-    
-    return NextResponse.json({
-    success:false,
-    message:"User not found"
-    });
-    }
-    
-    const user = rows[0];
-    
-    console.log("DB PASSWORD:", user.password);
-    console.log("ENTERED PASSWORD:", password);
-    
-    const match = await bcrypt.compare(password,user.password);
-    
-    console.log("MATCH:", match);
-    
-    if(!match){
-    
-    return NextResponse.json({
-    success:false,
-    message:"Invalid password"
-    });
-    }
+
+const [rows] = await db.query(
+"SELECT * FROM users WHERE email=?",
+[email]
+);
+
+if(rows.length === 0){
+return NextResponse.json({
+success:false,
+message:"User not found"
+});
+}
+
+const user = rows[0];
+
+const match = await bcrypt.compare(password,user.password);
+
+if(!match){
+return NextResponse.json({
+success:false,
+message:"Invalid password"
+});
+}
 
 /* create token */
 
